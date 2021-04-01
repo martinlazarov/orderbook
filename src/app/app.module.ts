@@ -1,12 +1,20 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ReactiveFormsModule } from '@angular/forms';
+
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatTableModule } from '@angular/material/table';
 
 import { AppComponent } from './app.component';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatInputModule } from '@angular/material';
 
 const angularMaterialModules = [
-  MatAutocompleteModule
+  MatAutocompleteModule,
+  MatTableModule,
+  MatInputModule,
+  MatFormFieldModule
 ];
 
 @NgModule({
@@ -15,6 +23,7 @@ const angularMaterialModules = [
   ],
   imports: [
     BrowserModule,
+    ReactiveFormsModule,
     BrowserAnimationsModule,
     ...angularMaterialModules,
   ],

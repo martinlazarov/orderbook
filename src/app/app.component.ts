@@ -8,6 +8,7 @@ import { startWith, map } from 'rxjs/operators';
 export interface IBookOrder {
   subject: WebSocketSubject<any>;
   symbol: string;
+  label: string;
 }
 @Component({
   selector: 'app-root',
@@ -19,23 +20,33 @@ export class AppComponent {
   filteredOptions: Observable<IBookOrder[]>;
   altcoins: IBookOrder[] = [];
 
+  displayedColumns: string[] = ['price', 'amount', 'total'];
+  dataSource = [];
+
   constructor() {
     this.altcoins = [{
       subject: null,
-      symbol: 'btcusdt'
+      symbol: 'btcusdt',
+      label: 'BTC/USDT'
     }, {
       subject: null,
-      symbol: 'ethbtc'
+      symbol: 'ethbtc',
+      label: 'ETH/BTC'
     }];
     this.altcoins.forEach((coin) => {
 
-      coin.subject = webSocket(`wss://stream.binance.com:9443/ws/${coin.symbol}@depth`);
+      coin.subject = webSocket(`wss://stream.binance.com:9443/ws/${coin.symbol}@depth10@100ms`);
 
       coin.subject.subscribe(
-        msg => console.log('message received: ', msg), // Called whenever there is a message from the server.
+        data => {
+          console.log('>>>data', data)
+        }, // Called whenever there is a message from the server.
         err => console.log(err), // Called if at any point WebSocket API signals some kind of error.
         () => console.log('complete') // Called when connection is closed (for whatever reason).
       );
+      setTimeout(() => {
+        coin.subject.unsubscribe();
+      }, 3500)
     })
   }
 
@@ -46,10 +57,17 @@ export class AppComponent {
     );
   }
 
-  private _filter(value: string): IBookOrder[] {
+  getOptionText(option: IBookOrder): string {
+    return option && option.label ? option.label : '';
+  }
+
+  private _filter(value): IBookOrder[] {
+    if (value.symbol) {
+      return [];
+    }
     const filterValue = value.toLowerCase();
-    console.log('>>>>', filterValue)
-    return this.altcoins.filter(({symbol}) => symbol.toLowerCase().indexOf(filterValue) === 0);
+    const foundItems = this.altcoins.filter((option: IBookOrder) => (option.symbol || '').toLowerCase().indexOf(filterValue) > -1);
+    return foundItems || this.altcoins;
   }
 }
 /**
