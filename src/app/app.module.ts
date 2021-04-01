@@ -10,6 +10,9 @@ import { MatTableModule } from '@angular/material/table';
 import { AppComponent } from './app.component';
 import { MatInputModule } from '@angular/material';
 
+import { DataTableComponent } from './shared/components/data-table/data-table.component';
+import { FormatSymbolLabelPipe } from './shared/pipes/format-symbol-label.pipe';
+
 const angularMaterialModules = [
   MatAutocompleteModule,
   MatTableModule,
@@ -19,7 +22,9 @@ const angularMaterialModules = [
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    DataTableComponent,
+    FormatSymbolLabelPipe
   ],
   imports: [
     BrowserModule,

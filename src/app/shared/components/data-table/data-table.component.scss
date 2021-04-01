@@ -1,0 +1,16 @@
+table {
+  width: 100%;
+}
+.bid-highlight {
+  color: rgb(2, 192, 118);
+}
+.ask-highlight {
+  color: rgb(248, 73, 96);
+}
+td {
+  padding-top: 6px !important;
+  padding-bottom: 6px !important;
+}
+tr.mat-row {
+  height: auto;
+}

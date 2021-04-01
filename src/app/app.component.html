@@ -5,7 +5,7 @@
   <div class="data-container">
     <mat-form-field class="symbol-autocomplete">
       <mat-label>Choose Symbol</mat-label>
-      <input type="text" placeholder="Choose symbol" aria-label="Number" matInput [formControl]="myControl"
+      <input type="text" placeholder="Choose symbol" aria-label="Number" matInput [formControl]="symbolsAutocomplete"
         [matAutocomplete]="auto">
       <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" [displayWith]="getOptionText"
         (optionSelected)="onSymbolSelect($event.option.value)">
@@ -14,24 +14,10 @@
         </mat-option>
       </mat-autocomplete>
     </mat-form-field>
-    <table mat-table [dataSource]="dataSourceAsks" fixedLayout="fixed">
-      <ng-container matColumnDef="price">
-        <th mat-header-cell *matHeaderCellDef> Price (BTC) </th>
-        <td mat-cell *matCellDef="let element"> {{element.price}} </td>
-      </ng-container>
 
-      <ng-container matColumnDef="quantity">
-        <th mat-header-cell *matHeaderCellDef> Amount (ETH) </th>
-        <td mat-cell *matCellDef="let element"> {{element.quantity}} </td>
-      </ng-container>
-
-      <ng-container matColumnDef="total">
-        <th mat-header-cell *matHeaderCellDef> Total </th>
-        <td mat-cell *matCellDef="let element"> {{element.total}} </td>
-      </ng-container>
-
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-    </table>
+    <div class="data-tables" *ngIf="selectedSymbol">
+      <app-data-table [data]="dataSourceAsks" [symbol]="selectedSymbol" [type]="dataTypeEnum.Ask"></app-data-table>
+      <app-data-table [data]="dataSourceBids" [symbol]="selectedSymbol" [type]="dataTypeEnum.Bid"></app-data-table>
+    </div>
   </div>
 </div>
