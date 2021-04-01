@@ -1,33 +1,40 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
 import { Observable } from 'rxjs/internal/Observable';
-import { webSocket, WebSocketSubject } from "rxjs/webSocket";
+import { webSocket, WebSocketSubject } from 'rxjs/webSocket';
 import { startWith, map } from 'rxjs/operators';
 
 import { IBookOrder } from './shared/interfaces/book-order';
 import { DataType } from './shared/enums/data-type.enum';
 import { IBookItem } from './shared/interfaces/book-item';
+import {
+  PRICE_DIGITS,
+  QUANTITY_DIGITS,
+  STREAM_INTERVAL,
+  STREAM_LEVELS,
+  STREAM_NAME,
+  STREAM_URL,
+  TOTAL_DIGITS
+} from './shared/configs/config';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   symbolsAutocomplete = new FormControl();
   filteredOptions: Observable<IBookOrder[]>;
   altcoins: IBookOrder[] = [];
 
-  dataSourceAsks: IBookItem[];
-  dataSourceBids: IBookItem[];
+  data: IBookItem[];
   stream: WebSocketSubject<any>;
   selectedSymbol: IBookOrder;
   dataTypeEnum = DataType;
 
   constructor() {
-    this.dataSourceAsks = [];
-    this.dataSourceBids = [];
+    this.data = [];
     this.altcoins = [{
       symbol: 'btcusdt',
       label: 'BTC/USDT'
@@ -50,12 +57,14 @@ export class AppComponent {
       this.stream.unsubscribe();
       this.stream = null;
     }
-
-    this.stream = webSocket(`wss://stream.binance.com:9443/ws/${option.symbol}@depth10@10000ms`);
+    const url = `${STREAM_URL}/${option.symbol}${STREAM_NAME}${STREAM_LEVELS}${STREAM_INTERVAL}`;
+    this.stream = webSocket(url);
     this.stream.subscribe(
       ({ asks, bids }) => {
-        this.dataSourceAsks = asks.map(this.mapBookData);
-        this.dataSourceBids = bids.map(this.mapBookData);
+        this.data = [
+          ...asks.map((row) => this.mapBookData(row, DataType.Ask)),
+          ...bids.map((row) => this.mapBookData(row, DataType.Bid))
+        ];
       },
       error => console.error(error)
     );
@@ -66,14 +75,16 @@ export class AppComponent {
     return option && option.label ? option.label : '';
   }
 
-  private mapBookData(row: string[]): IBookItem {
+  private mapBookData(row: string[], type: DataType): IBookItem {
     const price = parseFloat(row[0]);
     const quantity = parseFloat(row[1]);
+
     return {
-      price: price.toFixed(6),
-      quantity: quantity.toFixed(3),
-      total: (price * quantity).toFixed(5)
-    }
+      type,
+      price: price.toFixed(PRICE_DIGITS),
+      quantity: quantity.toFixed(QUANTITY_DIGITS),
+      total: (price * quantity).toFixed(TOTAL_DIGITS),
+    };
   }
 
   private _filter(value): IBookOrder[] {

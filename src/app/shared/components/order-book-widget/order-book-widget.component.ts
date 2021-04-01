@@ -4,17 +4,17 @@ import { PriceSymbolLabel } from '../../enums/price-symbol-label.enum';
 import { IBookOrder } from '../../interfaces/book-order';
 
 @Component({
-  selector: 'app-data-table',
-  templateUrl: './data-table.component.html',
-  styleUrls: ['./data-table.component.scss']
+  selector: 'app-order-book-widget',
+  templateUrl: './order-book-widget.component.html',
+  styleUrls: ['./order-book-widget.component.scss']
 })
-export class DataTableComponent {
+export class OrderBookWidgetComponent {
   @Input() data;
   @Input() symbol: IBookOrder;
-  @Input() type: DataType;
 
   dataTypeEnum = DataType;
   priceSymbolLabelEnum = PriceSymbolLabel;
 
   displayedColumns: string[] = ['price', 'quantity', 'total'];
+
 }

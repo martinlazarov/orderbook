@@ -10,8 +10,8 @@ import { MatTableModule } from '@angular/material/table';
 import { AppComponent } from './app.component';
 import { MatInputModule } from '@angular/material';
 
-import { DataTableComponent } from './shared/components/data-table/data-table.component';
 import { FormatSymbolLabelPipe } from './shared/pipes/format-symbol-label.pipe';
+import { OrderBookWidgetComponent } from './shared/components/order-book-widget/order-book-widget.component';
 
 const angularMaterialModules = [
   MatAutocompleteModule,
@@ -23,8 +23,8 @@ const angularMaterialModules = [
 @NgModule({
   declarations: [
     AppComponent,
-    DataTableComponent,
-    FormatSymbolLabelPipe
+    FormatSymbolLabelPipe,
+    OrderBookWidgetComponent
   ],
   imports: [
     BrowserModule,

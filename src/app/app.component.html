@@ -15,9 +15,7 @@
       </mat-autocomplete>
     </mat-form-field>
 
-    <div class="data-tables" *ngIf="selectedSymbol">
-      <app-data-table [data]="dataSourceAsks" [symbol]="selectedSymbol" [type]="dataTypeEnum.Ask"></app-data-table>
-      <app-data-table [data]="dataSourceBids" [symbol]="selectedSymbol" [type]="dataTypeEnum.Bid"></app-data-table>
-    </div>
+    <app-order-book-widget class="data-tables" *ngIf="selectedSymbol" [data]="data" [symbol]="selectedSymbol">
+    </app-order-book-widget>
   </div>
 </div>
