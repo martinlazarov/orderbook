@@ -2,3 +2,17 @@
   display: flex;
   justify-content: center;
 }
+
+.data-container {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+img {
+  width: 600px;
+  height: 200px;
+  object-fit: cover;
+}
+.symbol-autocomplete {
+  width: 200px;
+}

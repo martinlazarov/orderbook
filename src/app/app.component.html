@@ -1,41 +1,37 @@
 <div class="main-container">
-  <img width="600" alt="Angular Logo"
+  <img alt="Angular Logo"
     src="https://mms.businesswire.com/media/20190108005101/en/699022/23/1000x1000_hor_%281%29.jpg">
 
-  <mat-form-field class="example-full-width">
-    <mat-label>Symbol</mat-label>
-    <input type="text" placeholder="Choose symbol" aria-label="Number" matInput [formControl]="myControl"
-      [matAutocomplete]="auto">
-    <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" [displayWith]="getOptionText">
-      <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
-        {{option.label}}
-      </mat-option>
-    </mat-autocomplete>
-  </mat-form-field>
-  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+  <div class="data-container">
+    <mat-form-field class="symbol-autocomplete">
+      <mat-label>Choose Symbol</mat-label>
+      <input type="text" placeholder="Choose symbol" aria-label="Number" matInput [formControl]="myControl"
+        [matAutocomplete]="auto">
+      <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" [displayWith]="getOptionText"
+        (optionSelected)="onSymbolSelect($event.option.value)">
+        <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+          {{option.label}}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+    <table mat-table [dataSource]="dataSourceAsks" fixedLayout="fixed">
+      <ng-container matColumnDef="price">
+        <th mat-header-cell *matHeaderCellDef> Price (BTC) </th>
+        <td mat-cell *matCellDef="let element"> {{element.price}} </td>
+      </ng-container>
 
-    <!--- Note that these columns can be defined in any order.
-            The actual rendered columns are set as a property on the row definition" -->
+      <ng-container matColumnDef="quantity">
+        <th mat-header-cell *matHeaderCellDef> Amount (ETH) </th>
+        <td mat-cell *matCellDef="let element"> {{element.quantity}} </td>
+      </ng-container>
 
-    <!-- Position Column -->
-    <ng-container matColumnDef="price">
-      <th mat-header-cell *matHeaderCellDef> Price (BTC) </th>
-      <td mat-cell *matCellDef="let element"> {{element.price}} </td>
-    </ng-container>
+      <ng-container matColumnDef="total">
+        <th mat-header-cell *matHeaderCellDef> Total </th>
+        <td mat-cell *matCellDef="let element"> {{element.total}} </td>
+      </ng-container>
 
-    <!-- Name Column -->
-    <ng-container matColumnDef="amount">
-      <th mat-header-cell *matHeaderCellDef> Amount (ETH) </th>
-      <td mat-cell *matCellDef="let element"> {{element.amount}} </td>
-    </ng-container>
-
-    <!-- Weight Column -->
-    <ng-container matColumnDef="total">
-      <th mat-header-cell *matHeaderCellDef> Total </th>
-      <td mat-cell *matCellDef="let element"> {{element.total}} </td>
-    </ng-container>
-
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-  </table>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </div>
 </div>
